@@ -1,6 +1,6 @@
 """
-File name: tasketai.py
-Description: Main runner file.
+File name: task.py
+Description: Defines the Task object.
 
 Author: Lacie Turner
 Date created: 2025-02-10
@@ -15,14 +15,29 @@ __credits__ = ["Lacie Turner"]
 __status__ = "Development"
 __version__ = "0.0.1"
 
+import uuid
 
-def get_daily_velocity() -> int:
+
+class Task:
+	def __init__(self):
+		pass
+
+
+def get_task_by_id(_id: uuid.UUID):
 	pass
 
 
-def main():
+def get_all_tasks():
 	pass
 
 
-if __name__ == '__main__':
-	main()
+def get_complete_tasks():
+	pass
+
+
+def get_incomplete_tasks():
+	pass
+
+
+def get_task_suggestions(velocity: int):
+	pass
