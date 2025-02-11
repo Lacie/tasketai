@@ -21,14 +21,24 @@ import random
 from pathlib import Path
 from datetime import datetime, timedelta
 
-NUM_TASKS = 250
 CSV_FILE = Path("./data/generated-test-tasks.csv")
-MAX_DUE_DATE = datetime.strptime("2025-02-17 23:59:59", "%Y-%m-%d %H:%M:%S")
+NUM_TASKS = 250
+MIN_DUE_DATE = datetime.now() - timedelta(days=5)
+MAX_DUE_DATE = datetime.now() + timedelta(days=35)
 DUE_DATE_PROBABILITY = random.uniform(0.08, 0.16)
 
-def generate_tasks(num_tasks: int, min_due_date: datetime,
-                   max_due_date: datetime = MAX_DUE_DATE,
+
+def generate_tasks(num_tasks: int, min_due_date: datetime = MIN_DUE_DATE, max_due_date: datetime = MAX_DUE_DATE,
                    due_date_probability: float = DUE_DATE_PROBABILITY):
+	"""
+	Generates a list of tasks based on the given parameters.
+
+	:param num_tasks: The number of tasks to generate.
+	:param min_due_date: The minimum due date to consider.
+	:param max_due_date: The maximum due date to consider.
+	:param due_date_probability: The probability to consider due date.
+	:return: The list of generated tasks.
+	"""
 	tasks = []
 	for num in range(num_tasks):
 		task_id = str(uuid.uuid4())
@@ -55,7 +65,7 @@ def generate_tasks(num_tasks: int, min_due_date: datetime,
 
 
 def main():
-	tasks = generate_tasks(NUM_TASKS, min_due_date=datetime.now() - timedelta(weeks=1))
+	tasks = generate_tasks(NUM_TASKS)
 	with open(CSV_FILE, "w", newline="") as csv_file:
 		writer = csv.writer(csv_file)
 		writer.writerow(["id","complete","title","urgency","importance","effort","due_date","_created","_modified"])
