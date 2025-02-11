@@ -21,7 +21,7 @@ import random
 from pathlib import Path
 from datetime import datetime, timedelta
 
-CSV_FILE = Path("./data/generated-test-tasks.csv")
+CSV_FILE = Path("../data/generated-test-tasks.csv")
 NUM_TASKS = 250
 MIN_DUE_DATE = datetime.now() - timedelta(days=5)
 MAX_DUE_DATE = datetime.now() + timedelta(days=35)

@@ -19,7 +19,7 @@ import pandas as pd
 from pathlib import Path
 from datetime import datetime
 
-CSV_FILE = Path("./data/generated-test-tasks.csv")
+CSV_FILE = Path("../data/generated-test-tasks.csv")
 
 
 def combine_relevance(urgency: int, importance: int) -> float:
