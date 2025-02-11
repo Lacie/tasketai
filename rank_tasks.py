@@ -82,7 +82,6 @@ def rank_tasks(dataframe: pd.DataFrame) -> pd.DataFrame:
 
 # Load data
 test_df = pd.read_csv(CSV_FILE)
-# TODO drop completed tasks
 
 # Create features
 test_df['combined_relevance'] = test_df.apply(lambda r: combine_relevance(r['urgency'], r['importance']), axis=1)
