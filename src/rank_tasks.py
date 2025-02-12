@@ -4,7 +4,7 @@ Description:
 
 Author: Lacie Turner
 Date created: 2025-02-10
-Date last modified: 2025-02-10
+Date last modified: 2025-02-11
 Python Version: 3.12
 """
 
@@ -16,10 +16,10 @@ __status__ = "Development"
 __version__ = "0.0.1"
 
 import pandas as pd
-from pathlib import Path
+import datetime as dt
 from datetime import datetime
 
-CSV_FILE = Path("../data/generated-test-tasks.csv")
+
 
 
 def combine_relevance(urgency: int, importance: int) -> float:
@@ -54,53 +54,72 @@ def combine_relevance(urgency: int, importance: int) -> float:
         return 2 + ((urgency + importance) / 10)
 
 
-def rank_tasks(dataframe: pd.DataFrame) -> pd.DataFrame:
+def preprocess_tasks(task_dataframe: pd.DataFrame) -> pd.DataFrame:
+    # Create features
+    task_dataframe['combined_relevance'] = task_dataframe.apply(lambda r: combine_relevance(r['urgency'], r['importance']), axis=1)
+    task_dataframe['has_due_date'] = task_dataframe['due_date'].notna().astype(int)
+    task_dataframe['due_date'] = pd.to_datetime(task_dataframe['due_date'], errors='coerce')
+    task_dataframe['days_until_due'] = (task_dataframe['due_date'] - dt.datetime.now()).dt.days
+    task_dataframe['days_until_due'] = task_dataframe['days_until_due'].fillna(9999)  # df['days_until_due'].max()
+
+    # Handle due date with multiplier
+    task_dataframe['due_date_multiplier'] = 1.0
+    if 'due_date' in task_dataframe.columns:
+      task_dataframe['due_date'] = pd.to_datetime(task_dataframe['due_date'], errors='coerce')
+      task_dataframe['days_until_due'] = (task_dataframe['due_date'] - datetime.now()).dt.days
+      # Overdue tasks get a large boost that is weighed heavier the longer it's overdue
+      task_dataframe.loc[task_dataframe['days_until_due'] < 0, 'due_date_multiplier'] = 1.5 + (abs(task_dataframe['days_until_due']) * 0.05)
+      # Tasks due today get a medium boost
+      task_dataframe.loc[task_dataframe['days_until_due'] == 0, 'due_date_multiplier'] = 1.5
+      # Tasks due within a week get a smaller boost
+      task_dataframe.loc[(task_dataframe['days_until_due'] > 0) & (task_dataframe['days_until_due'] < 7), 'due_date_multiplier'] = 1.25
+
+      # Handle NAs, if any
+      task_dataframe['days_until_due'] = task_dataframe['days_until_due'].fillna(9999)
+
+    # Calculate the relevance score
+    task_dataframe['relevance_score'] = task_dataframe['combined_relevance'] * task_dataframe['due_date_multiplier']
+
+    return task_dataframe
+
+
+def rank_tasks(task_dataframe: pd.DataFrame) -> pd.DataFrame:
     """
     Returns the given dataframe ranked according to multiple features.
 
-    :param dataframe: The dataframe to rank.
-    :return: The ranked dataframe.
+    :param task_dataframe: The dataframe to rank.
+    :return: A copy of the dataframe ranked in descending order.
     """
-    # Handle due date with multiplier
-    dataframe['due_date_multiplier'] = 1.0
-    if 'due_date' in dataframe.columns:
-      dataframe['due_date'] = pd.to_datetime(dataframe['due_date'], errors='coerce')
-      dataframe['days_until_due'] = (dataframe['due_date'] - datetime.now()).dt.days
-      # Overdue tasks get a large boost that is weighed heavier the longer it's overdue
-      dataframe.loc[dataframe['days_until_due'] < 0, 'due_date_multiplier'] = 1.5 + (abs(dataframe['days_until_due']) * 0.05)
-      # Tasks due today get a medium boost
-      dataframe.loc[dataframe['days_until_due'] == 0, 'due_date_multiplier'] = 1.5
-      # Tasks due within a week get a smaller boost
-      dataframe.loc[(dataframe['days_until_due'] > 0) & (dataframe['days_until_due'] < 7), 'due_date_multiplier'] = 1.25
+    task_df = preprocess_tasks(task_dataframe.copy()) # Create a copy of the dataframe
+    ranked_df = task_df.sort_values('relevance_score', ascending=False)
+    ranked_df['rank'] = range(1, len(task_df) + 1)
 
-      # Handle NAs, if any
-      dataframe['days_until_due'] = dataframe['days_until_due'].fillna(9999)
+    return ranked_df
 
-    dataframe['relevance_score'] = dataframe['combined_relevance'] * dataframe['due_date_multiplier']
-    ranked_tasks = dataframe.sort_values('relevance_score', ascending=False)
-    return ranked_tasks
 
-# Load data
-test_df = pd.read_csv(CSV_FILE)
+def print_dataframe(task_dataframe: pd.DataFrame, num_rows: int = None) -> None:
+    # headers
+    print(f"{'Rank'.ljust(4)}\t"
+          f"{'Task'.ljust(32)}\t"
+          f"{'Urgency'.ljust(8)}\t"
+          f"{'Importance'.ljust(10)}\t"
+          f"{'Due Date'.ljust(18)}\t"
+          f"{'Days Until Due'.ljust(14)}\t"
+          f"{'Due Date Multiplier'.ljust(20)}\t"
+          f"{'Combined Relevance'.ljust(18)}\t"
+          f"{'Relevance Score'.ljust(16)}\t")
 
-# Create features
-test_df['combined_relevance'] = test_df.apply(lambda r: combine_relevance(r['urgency'], r['importance']), axis=1)
-test_df['has_due_date'] = test_df['due_date'].notna().astype(int)
-test_df['due_date'] = pd.to_datetime(test_df['due_date'], errors='coerce')
-test_df['days_until_due'] = (test_df['due_date'] - datetime.now()).dt.days
-test_df['days_until_due'] = test_df['days_until_due'].fillna(9999)  # df['days_until_due'].max()
+    # rows
+    if num_rows:
+        task_dataframe = task_dataframe[:num_rows]
 
-# Rank 'em
-ranked_df = rank_tasks(test_df.copy())
-ranked_df['rank'] = range(1, len(ranked_df) + 1)
-
-# Print ranked tasks
-for index, row in ranked_df.iterrows():
-    print(f"#{str(row['rank']).zfill(3)} --> {row['title'].rjust(32)}\t"
-          f"Urgency: {row['urgency']}\t"
-          f"Importance: {row['importance']}\t"
-          f"Due Date: {str(row['due_date']).ljust(18)}\t"
-          f"Days Until Due: {str(row['days_until_due']).ljust(5)}\t"
-          f"Due Date Multiplier: {row['due_date_multiplier']}\t"
-          f"Combined Relevance: {row['combined_relevance']}\t"
-          f"Relevance Score: {row['relevance_score']}")
+    for index, row in task_dataframe.iterrows():
+        print(f"#{str(row['rank']).zfill(3) if row['rank'] else '---'.ljust(4)}\t"
+              f"{row['title'].rjust(32)}\t"
+              f"{str(row['urgency']).ljust(8)}\t"
+              f"{str(row['importance']).ljust(10)}\t"
+              f"{str(row['due_date']).ljust(18)}\t"
+              f"{str(row['days_until_due']).ljust(14)}\t"
+              f"{str(row['due_date_multiplier']).ljust(20)}\t"
+              f"{str(row['combined_relevance']).ljust(18)}\t"
+              f"{str(row['relevance_score']).ljust(16) if row['relevance_score'] else 'N/A'.ljust(16)}")
