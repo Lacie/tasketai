@@ -4,7 +4,7 @@ Description: Defines the Task object.
 
 Author: Lacie Turner
 Date created: 2025-02-10
-Date last modified: 2025-02-10
+Date last modified: 2025-02-11
 Python Version: 3.12
 """
 
@@ -16,11 +16,21 @@ __status__ = "Development"
 __version__ = "0.0.1"
 
 import uuid
+import pandas as pd
+from pathlib import Path
+
+CSV_FILE = Path("./data/generated-test-tasks.csv")
 
 
 class Task:
 	def __init__(self):
 		pass
+
+
+def load_tasks_from_csv(csv_file: Path = CSV_FILE) -> pd.DataFrame:
+	task_df = pd.read_csv(csv_file)
+
+	return task_df
 
 
 def get_task_by_id(_id: uuid.UUID):
