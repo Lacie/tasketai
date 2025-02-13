@@ -4,7 +4,7 @@ Description: Generates random tasks for testing purposes.
 
 Author: Lacie Turner
 Date created: 2025-02-10
-Date last modified: 2025-02-10
+Date last modified: 2025-02-12
 Python Version: 3.12
 """
 
@@ -13,7 +13,7 @@ __maintainer__ = "Lacie Turner"
 __email__ = "tasketai@lacie.dev"
 __credits__ = ["Lacie Turner"]
 __status__ = "Development"
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 
 import csv
 import uuid
@@ -56,9 +56,9 @@ def generate_tasks(num_tasks: int, min_due_date: datetime = MIN_DUE_DATE, max_du
 			due_date = min_due_date + timedelta(days=random_number_of_days)
 			if due_date > max_due_date:  # Ensure it's not after max_due_date
 				due_date = max_due_date.strftime("%Y-%m-%d %H:%M:%S")
-			due_date = due_date.strftime("%Y-%m-%d %H:%M:%S")
+			due_date = due_date.isoformat()
 
-		now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+		now = datetime.now().isoformat()
 		tasks.append([task_id, complete, title, urgency, importance, effort, due_date, now, now])
 
 	return tasks
