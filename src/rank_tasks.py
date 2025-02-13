@@ -4,7 +4,7 @@ Description:
 
 Author: Lacie Turner
 Date created: 2025-02-10
-Date last modified: 2025-02-11
+Date last modified: 2025-02-12
 Python Version: 3.12
 """
 
@@ -18,8 +18,6 @@ __version__ = "0.0.1"
 import pandas as pd
 import datetime as dt
 from datetime import datetime
-
-
 
 
 def combine_relevance(urgency: int, importance: int) -> float:
@@ -75,7 +73,7 @@ def preprocess_tasks(task_dataframe: pd.DataFrame) -> pd.DataFrame:
       task_dataframe.loc[(task_dataframe['days_until_due'] > 0) & (task_dataframe['days_until_due'] < 7), 'due_date_multiplier'] = 1.25
 
       # Handle NAs, if any
-      task_dataframe['days_until_due'] = task_dataframe['days_until_due'].fillna(9999)
+      task_dataframe['days_until_due'] = task_dataframe['days_until_due'].fillna(9999)  # Fill with large number
 
     # Calculate the relevance score
     task_dataframe['relevance_score'] = task_dataframe['combined_relevance'] * task_dataframe['due_date_multiplier']
