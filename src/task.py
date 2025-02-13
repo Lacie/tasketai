@@ -4,7 +4,7 @@ Description: Defines the Task object.
 
 Author: Lacie Turner
 Date created: 2025-02-10
-Date last modified: 2025-02-12
+Date last modified: 2025-02-13
 Python Version: 3.12
 """
 
@@ -19,6 +19,7 @@ import uuid
 import pandas as pd
 import datetime as dt
 from pathlib import Path
+from src.rank_tasks import rank_tasks
 
 
 class Task:
@@ -28,6 +29,7 @@ class Task:
 
 def load(task_file: Path) -> pd.DataFrame:
 	"""Loads a task file into a pandas DataFrame."""
+	task_file = Path(task_file)
 	assert task_file.exists(), f"Task file does not exist at {task_file}"
 	task_df = pd.read_csv(task_file)
 
@@ -49,29 +51,24 @@ def add(title: str, urgency: int, importance: int, effort: int, csv_file: Path) 
 		print(f"\nTask added!\n")
 
 
-def get_task_by_id(_id: uuid.UUID):
-	pass
+def get_task_by_id(task_id: uuid.UUID, task_file: Path) -> pd.DataFrame:
+	task_dataframe = load(task_file)
+	single_task_dataframe = task_dataframe.loc[task_dataframe['id'] == task_id]
+
+	return None if single_task_dataframe.empty else single_task_dataframe
 
 
-def get_all_tasks():
-	pass
+def get_effort(task_id: uuid.UUID, task_file: Path) -> int:
+	effort = 0
+	task = get_task_by_id(task_id, task_file)
+	if task is not None:
+		effort = list(task.get('effort'))[0]
 
-
-def get_complete_tasks():
-	pass
-
-
-def get_incomplete_tasks():
-	pass
-
-
-def get_task_suggestions(velocity: int, ranked_dataframe: pd.DataFrame) -> pd.DataFrame:
-	assert velocity in range(1, 3), "Velocity must be between 1 and 3"
-	pass
+	return effort
 
 
 def display_list(task_dataframe, start_index: int=0, end_index: int=-1) -> None:
-	task_df = task_dataframe[start_index:end_index]
+	task_dataframe = task_dataframe[start_index:end_index]
 	print(f"\n{'Task'.ljust(48)}"
 	      f"{'Complete'.ljust(12)}"
 	      f"{'Urgency'.ljust(11)}"
@@ -79,7 +76,7 @@ def display_list(task_dataframe, start_index: int=0, end_index: int=-1) -> None:
 	      f"{'Effort'.ljust(10)}"
 	      f"{'Due Date'.ljust(20)}")
 	print("-" * 114)
-	for index, row in task_df.iterrows():
+	for index, row in task_dataframe.iterrows():
 		print(f"{row['title'].ljust(48)}"
 		      f"{'Y'.ljust(12) if row['complete'] == "FALSE" else 'N'.ljust(12)}"
 		      f"{str(row['urgency']).ljust(11)}"
@@ -89,7 +86,13 @@ def display_list(task_dataframe, start_index: int=0, end_index: int=-1) -> None:
 	print()
 
 
-def display(task_id: uuid, task_csv: Path) -> None:
-	task_dataframe = load(task_csv)
-	task = task_dataframe.loc[task_dataframe['id'] == task_id]
-	print(task)
+def display(task_id: uuid, task_file: Path) -> None:
+	task = get_task_by_id(task_id, task_file)
+	if task is not None:
+		task = list(task.get('title'))[0]
+		print(f"- {task}")
+
+
+def rank(task_file: Path):
+	tasks = load(task_file)
+	return rank_tasks(tasks)

@@ -88,11 +88,12 @@ def rank_tasks(task_dataframe: pd.DataFrame) -> pd.DataFrame:
     :param task_dataframe: The dataframe to rank.
     :return: A copy of the dataframe ranked in descending order.
     """
-    task_df = preprocess_tasks(task_dataframe.copy()) # Create a copy of the dataframe
-    ranked_df = task_df.sort_values('relevance_score', ascending=False)
-    ranked_df['rank'] = range(1, len(task_df) + 1)
+    incomplete_tasks = task_dataframe.loc[task_dataframe['complete'] == False]
+    incomplete_tasks = preprocess_tasks(incomplete_tasks)
+    ranked_tasks = incomplete_tasks.sort_values('relevance_score', ascending=False)
+    ranked_tasks['rank'] = range(1, len(incomplete_tasks) + 1)
 
-    return ranked_df
+    return ranked_tasks
 
 
 def print_dataframe(task_dataframe: pd.DataFrame, num_rows: int = None) -> None:
@@ -101,6 +102,7 @@ def print_dataframe(task_dataframe: pd.DataFrame, num_rows: int = None) -> None:
           f"{'Task'.ljust(32)}\t"
           f"{'Urgency'.ljust(8)}\t"
           f"{'Importance'.ljust(10)}\t"
+          f"{'Effort'.ljust(10)}\t"
           f"{'Due Date'.ljust(18)}\t"
           f"{'Days Until Due'.ljust(14)}\t"
           f"{'Due Date Multiplier'.ljust(20)}\t"
@@ -116,6 +118,7 @@ def print_dataframe(task_dataframe: pd.DataFrame, num_rows: int = None) -> None:
               f"{row['title'].rjust(32)}\t"
               f"{str(row['urgency']).ljust(8)}\t"
               f"{str(row['importance']).ljust(10)}\t"
+              f"{str(row['effort']).ljust(10)}\t"
               f"{str(row['due_date']).ljust(18)}\t"
               f"{str(row['days_until_due']).ljust(14)}\t"
               f"{str(row['due_date_multiplier']).ljust(20)}\t"
