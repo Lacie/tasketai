@@ -1,1 +1,2 @@
 pandas~=2.2.3
+inquirer~=3.4.0
