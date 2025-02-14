@@ -16,6 +16,7 @@ __status__ = "Development"
 __version__ = "0.0.1"
 
 import inquirer
+import pandas as pd
 import src.task as task
 from inquirer import errors
 import src.user_data as user_data
@@ -146,8 +147,7 @@ def settings_menu() -> None:
 	except KeyboardInterrupt:
 		return
 
-def merge_task_suggestions(task_list_1, task_list_2, n: int = 4) -> list:
-	"""Prompts the user to merge task suggestions."""
+def merge_task_suggestions(task_list_1, task_list_2, chunk_size: int = 2, nth_index: int = 4) -> list:
 	"""
 	Merges task_list_2 into task_list_1 at every nth and nth + 1 index.
 	Example 1:
@@ -163,19 +163,26 @@ def merge_task_suggestions(task_list_1, task_list_2, n: int = 4) -> list:
 	
 	:param task_list_1: The list to be merged into.
 	:param task_list_2: The list to merge.
-	:param n: The nth index of the list to be merged.
+	:param chunk_size: The chunk size of task_list_2 to merge.
+	:param nth_index: The nth index of task_list_1 to be merged to.
 	"""
+	# break list_2 into chunks
+	task_list_2_chunks = [task_list_2[i:i+chunk_size] for i in range(0, len(task_list_2), chunk_size)]
+
 	insert_count = 0
 	for i in range(len(task_list_1)):
-		if i > 0 and i % n == 0:
-			# get chunks of length 2 from list 2
-			task_list_2_chunk = [task_list_2.pop(0), task_list_2.pop(0)] if len(task_list_2) >= 2 else [task_list_2.pop(0)] if len(task_list_2) >= 1 else []
+		if not task_list_2_chunks:
+			# no more chunks, stop iterating
+			break
+		if i > 0 and i % nth_index == 0:
+			# get list_2 chunk
+			task_list_2_chunk = task_list_2_chunks.pop(0)
 			# insert at nth index
 			task_list_1.insert(i + insert_count, task_list_2_chunk)
 			# keep track of inserts to offset index shift from insertion
 			insert_count += 1
 
-	task_list_1.extend(task_list_2)  # Add any leftovers
+	task_list_1.extend(task_list_2_chunks)  # add leftover chunks, if any
 	task_list_1 = [element for item in task_list_1 for element in (item if isinstance(item, list) else [item])]  # flatten the list
 
 	return task_list_1
@@ -199,9 +206,9 @@ def get_suggestions(velocity: int):
 
 	elif velocity == 2:
 		low_effort_tasks = ranked_tasks.loc[ranked_tasks['effort'] == 1]
-		medium_effort_tasks = ranked_tasks.loc[ranked_tasks['effort'] == 2]
+		med_effort_tasks = ranked_tasks.loc[ranked_tasks['effort'] == 2]
 
-		for index, row in medium_effort_tasks.iterrows():
+		for index, row in med_effort_tasks.iterrows():
 			suggested_task_ids.append(row['id']) if row['id'] not in selected_tasks else None
 
 		low_effort_task_ids = []
@@ -210,9 +217,27 @@ def get_suggestions(velocity: int):
 		suggested_task_ids = merge_task_suggestions(suggested_task_ids, low_effort_task_ids)
 
 	elif velocity == 3:
-		pass
+		low_effort_tasks = ranked_tasks.loc[ranked_tasks['effort'] == 1]
+		med_effort_tasks = ranked_tasks.loc[ranked_tasks['effort'] == 2]
+		high_effort_tasks = ranked_tasks.loc[ranked_tasks['effort'] == 3]
 
-	return ranked_tasks.loc[ranked_tasks['id'].isin(suggested_task_ids)]
+		for index, row in high_effort_tasks.iterrows():
+			suggested_task_ids.append(row['id']) if row['id'] not in selected_tasks else None
+
+		low_effort_task_ids = []
+		for index, row in low_effort_tasks.iterrows():
+			low_effort_task_ids.append(row['id']) if row['id'] not in selected_tasks else None
+		med_effort_task_ids = []
+		for index, row in med_effort_tasks.iterrows():
+			med_effort_task_ids.append(row['id']) if row['id'] not in selected_tasks else None
+
+		suggested_task_ids = merge_task_suggestions(suggested_task_ids, med_effort_task_ids, chunk_size=2, nth_index=3)
+		suggested_task_ids = merge_task_suggestions(suggested_task_ids, low_effort_task_ids, chunk_size=1, nth_index=5)
+
+	ranked_prioritized_tasks = ranked_tasks.loc[ranked_tasks['id'].isin(suggested_task_ids)].copy()
+	ranked_prioritized_tasks['id'] = pd.Categorical(ranked_prioritized_tasks['id'], categories=suggested_task_ids, ordered=True)
+
+	return ranked_prioritized_tasks.sort_values('id')
 
 
 def suggest_task_menu() -> None:
