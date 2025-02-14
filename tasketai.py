@@ -136,7 +136,7 @@ def settings_menu() -> None:
 	           ("Back", -1)]
 
 	try:
-		choice = inquirer.list_input("Select your velocity for today", choices=choices)
+		choice = inquirer.list_input("Select an option", choices=choices)
 		if choice == -1:
 			return
 		if choice == 1:
@@ -273,7 +273,7 @@ def main_menu():
 		choices = []
 		if not user_data.has_attr('velocity'):
 			choices.append(("Velocity", 3))
-		if user_data.has_attr('velocity') and (not user_data.has_attr('selected_tasks') or user_data.get_selected_effort() < user_data.get_attr('velocity')):
+		if user_data.has_attr('velocity') and user_data.get_selected_effort() < user_data.get_attr('velocity'):
 			choices.append(("Suggest Tasks", 4))
 
 		try:
