@@ -182,6 +182,11 @@ def merge_task_suggestions(task_list_1, task_list_2, n: int = 4) -> list:
 
 
 def get_suggestions(velocity: int):
+	"""
+	Prompts the user to select from a paginated view of suggested tasks.
+
+	:param velocity: The velocity of the user.
+	"""
 	task_file = user_data.get_attr('task_csv')
 	ranked_tasks = task.rank(task_file)
 	selected_tasks = user_data.get_attr('selected_tasks') if user_data.get_attr('selected_tasks') else []
@@ -264,7 +269,7 @@ def main_menu():
 	"""Provides the main menu."""
 	user_data.greeting()
 	while True:
-		user_data.display()
+		user_data.display_message()
 		choices = []
 		if not user_data.has_attr('velocity'):
 			choices.append(("Velocity", 3))
