@@ -41,7 +41,8 @@ python tasketai.py
 
 Running the program will display the [Main Menu](#main-menu). The options that are displayed depend on the user's current state.
 
-![tasketai_main-menu](../images/tasketai_main-menu.png)
+![tasketai_main-menu](./images/tasketai_main-menu.png)
+
 
 ## Navigation
 
@@ -71,11 +72,13 @@ The following options will only display if certain requirements have been met:
 
 ![tasketai_main-menu](./images/tasketai_main-menu.png)
 
+
 ### Velocity
 
 The `Velocity` option will be available if you have not yet entered your velocity for the day.
 
 ![tasketai_velocity](./images/tasketai_velocity.png)
+
 
 ### Suggest Tasks
 
@@ -104,6 +107,7 @@ You may either select one of the suggested tasks, `See more` to get the next 3 s
 
 ![tasketai_suggested-tasks](./images/tasketai_suggested-tasks.png)
 
+
 ### Add Task
 
 Select this option to add a task to your backlog.
@@ -128,11 +132,13 @@ The `See more` option is only available if you have more tasks to view.
 
 ![tasketai_view-task-backlog](./images/tasketai_view-task-backlog--see-more.png)
 
+
 ### Settings
 
 Select this option to view and update user settings.
 
 ![tasketai_settings-menu](./images/tasketai_settings-menu.png)
+
 
 #### Change Username
 
