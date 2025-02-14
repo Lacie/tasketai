@@ -32,13 +32,13 @@ def load() -> dict:
 	:return: The loaded user's data.
 	"""
 	if not USER_DATA_FILE.exists():
-		print(f"[DEBUG] No user data file found")
+		# print(f"[DEBUG] No user data file found")
 		USER_DATA_FILE.touch()
 
 	if USER_DATA_FILE.stat().st_size == 0:
 		_data = json.loads(USER_DATA_SCHEMA_FILE.read_text(encoding="UTF-8")) # load schema
 		USER_DATA_FILE.write_text(json.dumps(_data))
-		print(f"[DEBUG] User data file generated at {USER_DATA_FILE}")
+		# print(f"[DEBUG] User data file generated at {USER_DATA_FILE}")
 
 	user_data = json.loads(USER_DATA_FILE.read_text(encoding="UTF-8"))
 
