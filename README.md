@@ -44,7 +44,7 @@ There are several static options in the main menu that are always available. The
 - [Settings](#settings)
 - Quit
 
-The following options will display only under certain circumstances:
+The following options will only display if certain requirements have been met:
 - [Velocity](#velocity)
 - [Suggest Tasks](#suggest-tasks)
 
@@ -104,3 +104,20 @@ To delete your current username, leave the input field blank.
 ![tasketai_update-username](../images/tasketai_update-username.png)
 
 ---
+
+## Bugs, Issues, and Missing Features
+
+As this is just an initial prototype to serve as a proof of concept, it is missing some core features and intended functionality.
+
+### Issues
+
+1. There is no input validation for usernames
+2. Data is currently stored unprotected as local files
+   - User data is stored as a local JSON file, and the task backlog is stored as a file
+   - Any changes or modification to these files directly can result in crashes and errors
+   - Running multiple instances of the program simultaneously can lead to race conditions and/or data inconsistency
+
+### Missing Features
+
+1. There is no ability to add a due date when adding tasks
+2. 
