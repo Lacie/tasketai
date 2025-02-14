@@ -44,6 +44,30 @@ There are several static options in the main menu that are always available. The
 - [Settings](#settings)
 - Quit
 
+The following options will display only under certain circumstances:
+- [Velocity](#velocity)
+- [Suggest Tasks](#suggest-tasks)
+
+### Velocity
+
+The Velocity option will be available if you have not yet entered your velocity for the day.
+
+![tasketai_velocity](../images/tasketai_velocity.png)
+
+### Suggest Tasks
+
+The Suggest Tasks option will only be available if you have entered your velocity for the day AND the combined effort of your selected tasks is lower than your velocity.
+
+![tasketai_suggest-task--none-selected](../images/tasketai_suggest-task--none-selected.png)
+
+For example, if you have entered a HIGH velocity, but have only selected a single task of LOW effort, the Suggest Task option will still be available.
+
+![tasketai_suggest-task--under-velocity](../images/tasketai_suggest-task--under-velocity.png)
+
+You will not be able to select more tasks than your entered velocity. If your selected tasks equal your velocity, the Suggest Task option will no longer be available.
+
+![tasketai_suggest-task--at-velocity](../images/tasketai_suggest-task--at-velocity.png)
+
 ### Add Task
 
 Select this option to add a task to your backlog.
