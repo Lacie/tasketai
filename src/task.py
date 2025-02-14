@@ -1,6 +1,6 @@
 """
 File name: task.py
-Description: Defines the Task object.
+Description: Contains logic related to tasks.
 
 Author: Lacie Turner
 Date created: 2025-02-10
@@ -20,11 +20,6 @@ import pandas as pd
 import datetime as dt
 from pathlib import Path
 from src.rank_tasks import rank_tasks
-
-
-class Task:
-	def __init__(self):
-		pass
 
 
 def load(task_file: Path) -> pd.DataFrame:
@@ -48,7 +43,7 @@ def add(title: str, urgency: int, importance: int, effort: int, csv_file: Path) 
 			now = dt.datetime.now().isoformat()
 			#id,complete,title,urgency,importance,effort,due_date,_created,_modified
 			f.write(f"{uuid.uuid4()},FALSE,{title},{urgency},{importance},{effort},,{now},{now}\n")
-		print(f"\nTask added!\n")
+		print(f"\n[INFO] Task added!\n")
 
 
 def get_task_by_id(task_id: uuid.UUID, task_file: Path) -> pd.DataFrame:
