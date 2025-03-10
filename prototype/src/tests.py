@@ -1,4 +1,4 @@
-from tasketai import merge_task_suggestions
+from prototype.tasketai import merge_task_suggestions
 
 
 def test_merge_task_suggestions():

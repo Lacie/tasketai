@@ -17,10 +17,10 @@ __version__ = "0.0.1"
 
 import inquirer
 import pandas as pd
-import src.task as task
+import prototype.src.task as task
 from inquirer import errors
-import src.user_data as user_data
-from src.user_data import USER_TASK_FILE
+import prototype.src.user_data as user_data
+from prototype.src.user_data import USER_TASK_FILE
 
 MAX_TASKS_PER_PAGE = 20
 MAX_SUGGESTIONS_PER_PAGE = 3
@@ -104,10 +104,10 @@ def add_task_input() -> None:
 		if not answers:
 			return
 		task.add(title=answers.get('title'),
-				 urgency=answers.get('urgency'),
-				 importance=answers.get('importance'),
-				 effort=answers.get('effort'),
-				 csv_file=USER_TASK_FILE)
+		         urgency=answers.get('urgency'),
+		         importance=answers.get('importance'),
+		         effort=answers.get('effort'),
+		         csv_file=USER_TASK_FILE)
 
 	except (TypeError, KeyboardInterrupt):
 		return

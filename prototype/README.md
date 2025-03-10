@@ -41,7 +41,7 @@ python tasketai.py
 
 Running the program will display the [Main Menu](#main-menu). The options that are displayed depend on the user's current state.
 
-![tasketai_main-menu](./images/tasketai_main-menu.png)
+![tasketai_main-menu](images/tasketai_main-menu.png)
 
 
 ## Navigation
@@ -70,34 +70,34 @@ The following options will only display if certain requirements have been met:
 - [Velocity](#velocity)
 - [Suggest Tasks](#suggest-tasks)
 
-![tasketai_main-menu](./images/tasketai_main-menu.png)
+![tasketai_main-menu](images/tasketai_main-menu.png)
 
 
 ### Velocity
 
 The `Velocity` option will be available if you have not yet entered your velocity for the day.
 
-![tasketai_velocity](./images/tasketai_velocity.png)
+![tasketai_velocity](images/tasketai_velocity.png)
 
 
 ### Suggest Tasks
 
 The `Suggest Tasks` option will only be available if you have entered your velocity for the day **_and_** the combined effort of your selected tasks is lower than your velocity.
 
-![tasketai_suggest-task--none-selected](./images/tasketai_suggest-task--none-selected.png)
+![tasketai_suggest-task--none-selected](images/tasketai_suggest-task--none-selected.png)
 
 For example, if you have selected a `[HIGH]` velocity and a single task of `[LOW]` effort, the `Suggest Task` option will still be available.
 
-![tasketai_suggest-task--under-velocity](./images/tasketai_suggest-task--under-velocity.png)
+![tasketai_suggest-task--under-velocity](images/tasketai_suggest-task--under-velocity.png)
 
 You will not be able to select tasks in which their combined effort exceeds your velocity.
 
 If the combined effort of your selected tasks equal your velocity, or you selected a velocity of `[NONE]`, the `Suggest Task` option will no longer be available.
 
-![tasketai_suggest-task--at-velocity](./images/tasketai_suggest-task--at-velocity.png)
+![tasketai_suggest-task--at-velocity](images/tasketai_suggest-task--at-velocity.png)
 
 
-![tasketai_suggest-task--no-velocity](./images/tasketai_suggest-task--no-velocity.png)
+![tasketai_suggest-task--no-velocity](images/tasketai_suggest-task--no-velocity.png)
 
 
 Choosing the `Select Task` option will return a list of the top 3 suggested tasks based on their prioritization ranking and your remaining available velocity.
@@ -105,7 +105,7 @@ These tasks are prefixed with their effort value, represented as `[HIGH]`, `[MED
 
 You may either select one of the suggested tasks, `See more` to get the next 3 suggestions, or `Back` to return to the `Main Menu`.
 
-![tasketai_suggested-tasks](./images/tasketai_suggested-tasks.png)
+![tasketai_suggested-tasks](images/tasketai_suggested-tasks.png)
 
 
 ### Add Task
@@ -118,7 +118,7 @@ You will be prompted for the following input:
 - `Importance` How important the task is on a scale of 1-5, with 1 being not important and 5 bein very important.
 - `Effort` How much effort the task will take to complete on a scale of 1-3, with 1 being low effort and 3 being high effort.
 
-![tasketai_add-task](./images/tasketai_add-task.png)
+![tasketai_add-task](images/tasketai_add-task.png)
 
 Values for all 4 inputs are required to successfully save the task. Cancelling with `Ctrl+C` before the task is saved will discard any current input and return you to the `Main Menu`.
 
@@ -126,18 +126,18 @@ Values for all 4 inputs are required to successfully save the task. Cancelling w
 
 Selecting `View Task Backlock` will display a paginated view of your task backlog in the order they were added. The maximum number of tasks displayed per page is 20.
 
-![tasketai_view-task-backlog](./images/tasketai_view-task-backlog.png)
+![tasketai_view-task-backlog](images/tasketai_view-task-backlog.png)
 
 The `See more` option is only available if you have more tasks to view.
 
-![tasketai_view-task-backlog](./images/tasketai_view-task-backlog--see-more.png)
+![tasketai_view-task-backlog](images/tasketai_view-task-backlog--see-more.png)
 
 
 ### Settings
 
 Select this option to view and update user settings.
 
-![tasketai_settings-menu](./images/tasketai_settings-menu.png)
+![tasketai_settings-menu](images/tasketai_settings-menu.png)
 
 
 #### Change Username
@@ -146,7 +146,7 @@ Select this option to add or update your username.
 
 To delete your current username, leave the input field blank.
 
-![tasketai_change-username](./images/tasketai_change-username.png)
+![tasketai_change-username](images/tasketai_change-username.png)
 
 
 ---

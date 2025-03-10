@@ -17,7 +17,7 @@ __version__ = "0.0.1"
 
 import json
 import datetime as dt
-import src.task as task
+import prototype.src.task as task
 from pathlib import Path
 
 USER_DATA_FILE = Path("./data/user-data.json").resolve()

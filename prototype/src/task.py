@@ -19,7 +19,7 @@ import uuid
 import pandas as pd
 import datetime as dt
 from pathlib import Path
-from src.rank_tasks import rank_tasks
+from prototype.src.rank_tasks import rank_tasks
 
 
 def load(task_file: Path) -> pd.DataFrame:
