@@ -221,7 +221,7 @@ Project Link: [https://github.com/lacie/tasketai](https://github.com/lacie/taske
 [issues-shield]: https://img.shields.io/github/issues/lacie/tasketai.svg?style=for-the-badge
 [issues-url]: https://github.com/lacie/tasketai/issues
 [license-shield]: https://img.shields.io/github/license/lacie/tasketai.svg?style=for-the-badge
-[license-url]: https://github.com/lacie/tasketai/blob/master/LICENSE.txt
+[license-url]: https://github.com/lacie/tasketai/blob/main/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/Lacie
 [product-screenshot]: images/screenshot.png
