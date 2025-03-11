@@ -171,8 +171,6 @@ See the [open issues](https://github.com/lacie/tasketai/issues) for a full list 
 
 
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 ### Top contributors:
 
 <a href="https://github.com/lacie/tasketai/graphs/contributors">
